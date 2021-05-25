@@ -9,6 +9,9 @@
         <item android:id="@+id/authors"
             android:title="Authors"/>
 
+        <item android:id="@+id/publish"
+            android:title="Publishers"/>
+
         <item android:id="@+id/logout"
             android:title="Logout"/>
     </group>

@@ -1,43 +1,38 @@
 package com.example.bookapi.utils;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.example.bookapi.R;
-import com.example.bookapi.models.Data;
-import com.example.bookapi.models.ImageLinks;
-import com.example.bookapi.models.Items;
-import com.example.bookapi.models.ResponseModal;
-
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import retrofit2.Response;
+import com.bumptech.glide.Glide;
+import com.example.bookapi.R;
+import com.example.bookapi.models.ImageLinks;
+import com.example.bookapi.models.Items;
 
-public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BaseViewHolder> {
+import java.util.List;
+
+public class PublisherAdapter extends RecyclerView.Adapter<PublisherAdapter.BaseViewHolder> {
 
     private List<Items> data;
     private Context context;
     private ImageLinks clickedItem;
-    private OnRecycleClickListener onRecycleClickListener;
+    private PublisherAdapter.OnRecycleClickListener onRecycleClickListener;
 
 
 
-    public BooksAdapter(List<Items> data, OnRecycleClickListener onRecycleClickListener) {
+    public PublisherAdapter(List<Items> data, PublisherAdapter.OnRecycleClickListener onRecycleClickListener) {
         this.data = data;
         this.onRecycleClickListener = onRecycleClickListener;
     }
 
 
-    public BooksAdapter() {
+    public PublisherAdapter() {
     }
 
     public void setdata( List<Items> data) {
@@ -47,20 +42,19 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BaseViewHold
 
     @NonNull
     @Override
-    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PublisherAdapter.BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context=parent.getContext();
-        return new BooksAdapter.BaseViewHolder(LayoutInflater.from(context).inflate(R.layout.recycleitem,parent,false));
+        return new PublisherAdapter.BaseViewHolder(LayoutInflater.from(context).inflate(R.layout.child_publish,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PublisherAdapter.BaseViewHolder holder, int position) {
         Items user= data.get(position);
-      String t= user.getVolumeInfo().getTitle();
-      //String i = user.getImageLinks().getSmallThumbnail();
-      holder.title.setText(t);
-     // holder.image.setText(i);
+        String t= user.getVolumeInfo().getPublisher();
+        //String i = user.getImageLinks().getSmallThumbnail();
+        holder.publisher.setText(t);
+        holder.publishedDate.setText(user.getVolumeInfo().getPublishedDate());
 
-      //  Glide.with(holder.itemView.getContext()).load(user.getVolumeInfo().getImageLinks().getSmallThumbnail()).into(holder.image);
         if(user.getVolumeInfo().getImageLinks()!=null) {
             Glide.with(holder.itemView.getContext()).load(user.getVolumeInfo().getImageLinks().getSmallThumbnail()).into(holder.image);
         }
@@ -69,13 +63,12 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BaseViewHold
             Glide.with(holder.itemView.getContext()).load("https://cdn.dribbble.com/users/201599/screenshots/1545461/book.jpg?compress=1&resize=400x300").into(holder.image);;
         }
 
-
         holder.image.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-            //  clickedItem.getSmallThumbnail(data);
-          }
-      });
+            @Override
+            public void onClick(View view) {
+                //  clickedItem.getSmallThumbnail(data);
+            }
+        });
 
     }
 
@@ -93,16 +86,17 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BaseViewHold
     }
 
     public interface Clickeditem {
-       // Log.e("clicked user",data.toString());
+        // Log.e("clicked user",data.toString());
     }
 
     public class BaseViewHolder extends RecyclerView.ViewHolder {
 
-        TextView title;
+        TextView publisher,publishedDate;
         ImageView image;
         public BaseViewHolder(@NonNull View itemView) {
             super(itemView);
-            title=itemView.findViewById(R.id.booktitle);
+            publisher=itemView.findViewById(R.id.publisher);
+            publishedDate=itemView.findViewById(R.id.publishedDate);
             image=itemView.findViewById(R.id.bookImage);
         }
     }

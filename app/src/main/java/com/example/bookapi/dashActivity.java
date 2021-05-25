@@ -53,7 +53,18 @@ public class dashActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.dashboard) {
             navController.navigate(R.id.dashboardFragment);
-        } else if (id == R.id.logout) {
+        }
+        else if (id == R.id.authors) {
+            navController.navigate(R.id.authors);
+
+        }
+        else if (id == R.id.publish) {
+            navController.navigate(R.id.publish);
+
+        }
+
+
+        else if (id == R.id.logout) {
             firebaseAuth.signOut();
             Intent intent = new Intent(this, SigninActivity.class);
             startActivity(intent);

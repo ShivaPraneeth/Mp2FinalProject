@@ -1,6 +1,11 @@
 package com.example.bookapi.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,34 +13,26 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.bookapi.FirebaseComponents;
 import com.example.bookapi.R;
 import com.example.bookapi.firebasecallbacks.firebasecallbacks.ReadCallbacks;
-import com.example.bookapi.models.Data;
 import com.example.bookapi.models.Items;
 import com.example.bookapi.models.Person;
 import com.example.bookapi.models.ResponseModal;
 import com.example.bookapi.utils.APIClient;
 import com.example.bookapi.utils.BooksAdapter;
+import com.example.bookapi.utils.PublisherAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-
-public class dashboardFragment extends Fragment implements BooksAdapter.OnRecycleClickListener{
+public class PublishFragment extends Fragment implements BooksAdapter.OnRecycleClickListener{
 
 
     FirebaseAuth firebaseAuth;
@@ -44,7 +41,7 @@ public class dashboardFragment extends Fragment implements BooksAdapter.OnRecycl
     FirebaseComponents firebaseComponents;
     TextView txt_headerText;
     RecyclerView recyclerView;
-    BooksAdapter booksAdapter;
+    PublisherAdapter booksAdapter;
 
   /*  @BindView(R.id.recycleView)
     RecyclerView recyclerView;
@@ -56,7 +53,7 @@ public class dashboardFragment extends Fragment implements BooksAdapter.OnRecycl
 
 //    APIInterface apiInterface;
 
-    public dashboardFragment() {
+    public PublishFragment() {
         // Required empty public constructor
     }
 
@@ -82,11 +79,11 @@ public class dashboardFragment extends Fragment implements BooksAdapter.OnRecycl
 
 //        ButterKnife.bind(view);
 
-          recyclerView = view.findViewById(R.id.recycleView);
+        recyclerView = view.findViewById(R.id.recycleView);
         //  swipeRefreshLayout = view.findViewById(R.id.swipeRefresh);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
-        booksAdapter= new BooksAdapter();
+        booksAdapter= new PublisherAdapter();
         getAllData();
 
         NavigationView navigationView = getActivity().findViewById(R.id.navigationView);
@@ -120,7 +117,7 @@ public class dashboardFragment extends Fragment implements BooksAdapter.OnRecycl
                         Log.v("Tag",book.getVolumeInfo().getTitle());
                     }
 
-                   // Log.d("sucess",response.body().toString());
+                    // Log.d("sucess",response.body().toString());
                 }
             }
 

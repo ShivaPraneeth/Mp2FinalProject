@@ -12,4 +12,21 @@
         android:name="com.example.bookapi.fragments.dashboardFragment"
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+
+        android:id="@+id/authors"
+        android:name="com.example.bookapi.fragments.AuthorFragment"
+        android:label="fragment_dashboard1"
+        tools:layout="@layout/authorfragment" />
+
+
+
+    <fragment
+
+        android:id="@+id/publish"
+        android:name="com.example.bookapi.fragments.PublishFragment"
+        android:label="fragment_dashboard2"
+        tools:layout="@layout/publishfragment" />
+
 </navigation>
