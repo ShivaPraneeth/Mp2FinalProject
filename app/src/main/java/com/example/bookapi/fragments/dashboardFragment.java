@@ -5,7 +5,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import butterknife.BindView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +24,21 @@ import android.widget.TextView;
 import com.example.bookapi.FirebaseComponents;
 import com.example.bookapi.R;
 import com.example.bookapi.firebasecallbacks.firebasecallbacks.ReadCallbacks;
+import com.example.bookapi.models.Data;
+import com.example.bookapi.models.Items;
 import com.example.bookapi.models.Person;
+import com.example.bookapi.models.ResponseModal;
+import com.example.bookapi.utils.APIClient;
+import com.example.bookapi.utils.BooksAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.List;
 
-public class dashboardFragment extends Fragment {
+
+public class dashboardFragment extends Fragment implements BooksAdapter.OnRecycleClickListener{
 
 
     FirebaseAuth firebaseAuth;
@@ -29,13 +46,20 @@ public class dashboardFragment extends Fragment {
     FirebaseFirestore firebaseFirestore;
     FirebaseComponents firebaseComponents;
     TextView txt_headerText;
+    RecyclerView recyclerView;
+    BooksAdapter booksAdapter;
+
 
   /*  @BindView(R.id.recycleView)
     RecyclerView recyclerView;
+
+
     @BindView(R.id.swipeRefresh)
-    SwipeRefreshLayout swipeRefreshLayout;
+  SwipeRefreshLayout swipeRefreshLayout;
 
    */
+
+
 
 
 //    APIInterface apiInterface;
@@ -64,10 +88,14 @@ public class dashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        ButterKnife.bind(view);
+//     ButterKnife.bind(view);
 
-        //  recyclerView = view.findViewById(R.id.recycleView);
-        //  swipeRefreshLayout = view.findViewById(R.id.swipeRefresh);
+          recyclerView = view.findViewById(R.id.recycleView);
+       // swipeRefreshLayout = view.findViewById(R.id.swipeRefresh);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        booksAdapter= new BooksAdapter();
+        getAllData();
 
         NavigationView navigationView = getActivity().findViewById(R.id.navigationView);
         View headerView = navigationView.getHeaderView(0);
@@ -83,95 +111,36 @@ public class dashboardFragment extends Fragment {
             }
         });
 
-     /*   swipeRefreshLayout.setOnRefreshListener(this);
-        recyclerView.setHasFixedSize(true);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-
-        adapter = new MovieRecyclerViewAdapter(new ArrayList<>(), this);
-        recyclerView.setAdapter(adapter);
-
-        makeApiCall();
-
-        recyclerView.addOnScrollListener(new PaginationListener(layoutManager) {
-            @Override
-            protected void loadMoreItems() {
-
-                isLoading = true;
-                currentPage++;
-                makeApiCall();
-            }
-
-            @Override
-            public boolean isLastPage() {
-                return isLastPage;
-            }
-
-            @Override
-            public boolean isLoading() {
-                return isLoading;
-            }
-        });
     }
+    public void getAllData(){
+        Call<ResponseModal> data= APIClient.getAPIService().getAllData();
 
-    public void makeApiCall()
-    {
-        apiInterface = APIClient.getClient().create(APIInterface.class);
-
-        Call<Model>getAllData( String.valueOf(currentPage));
-        call.enqueue(new Callback<MovieList>() {
+        data.enqueue(new Callback<ResponseModal>() {
             @Override
-            public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-                Log.d("Dashboard Fragment", ""+response.body());
+            public void onResponse(Call<ResponseModal> call, Response<ResponseModal> response) {
+                if(response.isSuccessful()){
+                    ResponseModal data= response.body();
+                    booksAdapter.setdata(data.getItems());
+                    recyclerView.setAdapter(booksAdapter);
 
-                MovieList movieList =response.body();
-                Data data = movieList.data;
-                List<Movie> movies = data.movies;
-                myMovieList = movies;
+                    for(Items book:data.getItems()){
+                        Log.v("Tag",book.getVolumeInfo().getTitle());
+                    }
 
-                Log.d("Dashboard Fragment", "Movie Size"+movies.size());
-                Log.d("Dashboard Fragment", "First Movie"+movies.get(0).title);
-
-
-                if(currentPage != PAGE_START) adapter.removeLoading();
-
-                adapter.addItems(movies);
-                swipeRefreshLayout.setRefreshing(false);
-
-                if (currentPage < totalPage)
-                {
-                    adapter.addLoading();
-                }else{
-                    isLastPage = true;
+                   // Log.d("sucess",response.body().toString());
                 }
-                isLoading = false;
             }
 
             @Override
-            public void onFailure(Call<MovieList> call, Throwable t) {
-
-                call.cancel();
-                Log.d("Dashboard Fragment", ""+t.getMessage());
+            public void onFailure(Call<ResponseModal> call, Throwable t) {
+                Log.e("failure",t.getLocalizedMessage());
             }
         });
-    }
-
-    @Override
-    public void onRefresh() {
-
-        currentPage = PAGE_START;
-        isLastPage = false;
-        adapter.clear();
-        makeApiCall();
     }
 
     @Override
     public void onMovieClick(int position) {
 
-        Toast.makeText(getActivity().getApplicationContext(), myMovieList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
-    }
-
-      */
     }
 }

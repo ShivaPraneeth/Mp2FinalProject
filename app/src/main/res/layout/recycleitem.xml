@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
     android:layout_margin="4dp"
@@ -10,31 +10,32 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:id="@+id/bookImage"
-            android:scaleType="fitXY"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginStart="10dp"
-            android:contentDescription="Book Image"/>
+            android:contentDescription="Book Title"/>
 
         <TextView
-            android:id="@+id/bookName"
+            android:id="@+id/booktitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="28dp"
             android:layout_marginTop="56dp"
             android:layout_toEndOf="@+id/bookImage"
-            android:text="BookName"
+            android:text="BookSubTitle"
             android:textSize="20sp" />
 
-    </RelativeLayout>
 
+
+
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
